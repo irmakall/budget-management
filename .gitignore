@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# env sablonu commit edilsin (yukaridaki .env* kalibindan muaf)
+!.env.local.example
+
+# editor / arac dosyalari (kisisel, projeye ait degil)
+CLAUDE.md
+.claude/
+.cursor/
+.vscode/
+.idea/
