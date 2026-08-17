@@ -1,9 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-// Sunucuda calisan Supabase istemcisi.
-// Server Component ve Server Action icinde bunu kullaniyoruz.
-// Oturum bilgisi cerezde durdugu icin cookie kopruse burada kuruluyor.
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -21,8 +18,8 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server Component icinden cerez yazilamaz.
-            // Middleware oturumu zaten tazeledigi icin burayi yutmak guvenli.
+            
+          
           }
         },
       },
