@@ -1,9 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../auth/actions";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
-export default async function DashboardPage() {
+export default async function SettingsPage() {
   const supabase = await createClient();
 
   const {
@@ -11,10 +10,20 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("base_currency, month_start_day")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    return <p>There is an error</p>;
+  }
+
   return (
     <>
-      <Link href="/settings">Settings</Link>
-      <p>{user.email}</p>
+      <p>Currency: {profile.base_currency}</p>
+      <p>Month starts on day: {profile.month_start_day}</p>
       <form action={signOut}>
         <button>Log out</button>
       </form>

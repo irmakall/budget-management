@@ -40,7 +40,10 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAuthPage = path === "/login" || path === "/signup";
 
-  if (!user && path.startsWith("/dashboard")) {
+  const protectedPaths = ["/dashboard", "/settings"];
+  const isProtected = protectedPaths.some((p) => path.startsWith(p));
+
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return withCookies(NextResponse.redirect(url), response);
