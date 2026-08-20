@@ -1,0 +1,30 @@
+alter table goals enable row level security;
+
+drop policy if exists "Users can read own goals" on goals;
+create policy "Users can read own goals"
+on goals
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Users can create own goals" on goals;
+create policy "Users can create own goals"
+on goals
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can update own goals" on goals;
+create policy "Users can update own goals"
+on goals
+for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+drop policy if exists "Users can delete own goals" on goals;
+create policy "Users can delete own goals"
+on goals
+for delete
+to authenticated
+using (auth.uid() = user_id);
