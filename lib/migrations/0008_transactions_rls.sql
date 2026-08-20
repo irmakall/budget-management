@@ -31,3 +31,16 @@ with check (
     )
   )
 );
+
+create policy "Users can read own transactions"
+on transactions
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+
+create policy "Users can delete own transactions"
+on transactions
+for delete
+to authenticated
+using (auth.uid() = user_id);
