@@ -44,6 +44,7 @@ next-env.d.ts
 !.env.local.example
 
 # editor / arac dosyalari (kisisel, projeye ait degil)
+
 CLAUDE.md
 .claude/
 .cursor/

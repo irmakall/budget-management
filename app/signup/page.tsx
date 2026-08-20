@@ -6,9 +6,12 @@ export default function SignUpPage() {
     <AuthForm
       title="Create account"
       submitLabel="Create account"
-      pendingLabel="Creating..."
+      pendingLabel="Creating…"
       action={signUp}
       passwordAutoComplete="new-password"
+      altPrompt="Already have an account?"
+      altHref="/login"
+      altLabel="Log in"
     />
   );
 }

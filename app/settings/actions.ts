@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { isCurrency } from "@/lib/currencies";
 
 export type SettingsState = { error: string | null; success: boolean };
 
@@ -19,8 +20,7 @@ export async function updateProfile(
 
   const baseCurrency = String(formData.get("base_currency") ?? "");
   const monthStartDay = Number(formData.get("month_start_day"));
-  const allowed = ["TRY", "USD", "EUR"];
-  if (!allowed.includes(baseCurrency))
+  if (!isCurrency(baseCurrency))
     return { error: "Select a valid currency.", success: false };
   if (
     !Number.isInteger(monthStartDay) ||

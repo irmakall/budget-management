@@ -1,13 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-
-
 function withCookies(target: NextResponse, source: NextResponse) {
-  source.cookies.getAll().forEach((c) => target.cookies.set(c.name, c.value, c));
+  source.cookies
+    .getAll()
+    .forEach((c) => target.cookies.set(c.name, c.value, c));
   return target;
 }
-
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -38,9 +37,19 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isAuthPage = path === "/login" || path === "/signup";
+  const isAuthPage =
+    path === "/login" || path === "/signup" || path === "/forgot-password";
 
-  const protectedPaths = ["/dashboard", "/settings"];
+  const protectedPaths = [
+    "/dashboard",
+    "/transactions",
+    "/reports",
+    "/budgets",
+    "/goals",
+    "/recurring",
+    "/categories",
+    "/settings",
+  ];
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
 
   if (!user && isProtected) {

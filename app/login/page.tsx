@@ -6,9 +6,14 @@ export default function LoginPage() {
     <AuthForm
       title="Log in"
       submitLabel="Log in"
-      pendingLabel="Logging in..."
+      pendingLabel="Logging in…"
       action={signIn}
       passwordAutoComplete="current-password"
+      altPrompt="No account yet?"
+      altHref="/signup"
+      altLabel="Create one"
+      helpHref="/forgot-password"
+      helpLabel="Forgot your password?"
     />
   );
 }

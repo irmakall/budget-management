@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import type { AuthState } from "@/app/auth/actions";
 
@@ -11,6 +12,11 @@ type Props = {
   pendingLabel: string;
   action: AuthAction;
   passwordAutoComplete: "new-password" | "current-password";
+  altPrompt: string;
+  altHref: string;
+  altLabel: string;
+  helpHref?: string;
+  helpLabel?: string;
 };
 
 const initialState: AuthState = { error: null };
@@ -21,60 +27,88 @@ export function AuthForm({
   pendingLabel,
   action,
   passwordAutoComplete,
+  altPrompt,
+  altHref,
+  altLabel,
+  helpHref,
+  helpLabel,
 }: Props) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
   return (
     <main className="flex min-h-screen items-center justify-center p-6">
-      <form
-        action={formAction}
-        className="w-full max-w-sm space-y-4 rounded-lg border border-gray-200 p-6"
-      >
-        <h1 className="text-xl font-semibold">{title}</h1>
+      <div className="w-full" style={{ maxWidth: "22rem" }}>
+        <p className="wordmark mb-6 block">Para&nbsp;Takip</p>
 
-        <div className="space-y-1">
-          <label htmlFor="email" className="text-sm text-gray-600">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
+        <form action={formAction} className="card card-pad space-y-4">
+          <h1 className="page-title">{title}</h1>
 
-        <div className="space-y-1">
-          <label htmlFor="password" className="text-sm text-gray-600">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={6}
-            autoComplete={passwordAutoComplete}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
+          <div className="field">
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className="input"
+            />
+          </div>
 
-        {state.error && (
-          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-            {state.error}
+          <div className="field">
+            <label htmlFor="password" className="label">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              minLength={6}
+              autoComplete={passwordAutoComplete}
+              className="input"
+            />
+            <span className="note">At least 6 characters.</span>
+          </div>
+
+          {state.error && (
+            <p className="msg msg-error" role="status">
+              {state.error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="btn btn-primary w-full"
+          >
+            {isPending ? pendingLabel : submitLabel}
+          </button>
+        </form>
+
+        {helpHref && helpLabel && (
+          <p className="note mt-4 text-center">
+            <Link
+              href={helpHref}
+              style={{ color: "var(--primary)", fontWeight: 600 }}
+            >
+              {helpLabel}
+            </Link>
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full rounded-md bg-black py-2 text-sm text-white disabled:opacity-50"
-        >
-          {isPending ? pendingLabel : submitLabel}
-        </button>
-      </form>
+        <p className="note mt-2 text-center">
+          {altPrompt}{" "}
+          <Link
+            href={altHref}
+            style={{ color: "var(--primary)", fontWeight: 600 }}
+          >
+            {altLabel}
+          </Link>
+        </p>
+      </div>
     </main>
   );
 }

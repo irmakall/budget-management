@@ -1,6 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
-import { signOut } from "../auth/actions";
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { AppShell } from "@/components/nav";
+import { signOut } from "../auth/actions";
 import { SettingsForm } from "./settings-form";
 
 export default async function SettingsPage() {
@@ -17,20 +18,38 @@ export default async function SettingsPage() {
     .eq("id", user.id)
     .single();
 
-  if (error) {
-    return <p>There is an error</p>;
+  if (error || !profile) {
+    return (
+      <AppShell current="/settings" title="Settings">
+        <p className="msg msg-error" role="status">
+          Could not read your profile settings.
+        </p>
+      </AppShell>
+    );
   }
 
   return (
-    <>
-      <SettingsForm
-        key={`${profile.base_currency}-${profile.month_start_day}`}
-        baseCurrency={profile.base_currency}
-        monthStartDay={profile.month_start_day}
-      />
-      <form action={signOut}>
-        <button>Log out</button>
-      </form>
-    </>
+    <AppShell current="/settings" title="Settings" meta={user.email}>
+      <div className="grid">
+        <section className="span-6 space-y-4">
+          <SettingsForm
+            key={`${profile.base_currency}-${profile.month_start_day}`}
+            baseCurrency={profile.base_currency}
+            monthStartDay={profile.month_start_day}
+          />
+
+          <p className="note">
+            Changing your base currency does not re-convert past transactions —
+            each one keeps the rate it was recorded with.
+          </p>
+
+          <form action={signOut}>
+            <button type="submit" className="btn btn-secondary btn-sm">
+              Log out
+            </button>
+          </form>
+        </section>
+      </div>
+    </AppShell>
   );
 }
